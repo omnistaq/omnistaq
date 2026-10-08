@@ -4,7 +4,7 @@
  *   Everything on ONE PHP host (or XAMPP) ........ leave it empty:  ''
  *   Pages on GitHub Pages, PHP on another host ... 'https://www.yourdomain.lk/omnistaq/'
  */
-window.OMNI_API_BASE = '';
+window.OMNI_API_BASE = 'https://omnistaq.github.io/omnistaq/';
 
 window.OMNI = (function () {
   var base = String(window.OMNI_API_BASE || '').trim();
