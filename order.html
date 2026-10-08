@@ -1,0 +1,24 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><script src="config.js?v=4.0.0"></script><script src="loader.js?v=4.0.0"></script>
+<meta name="theme-color" content="#061a30"><meta name="robots" content="noindex"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="manifest" href="manifest.webmanifest">
+<title>Track your OmniStaq order</title><meta property="og:type" content="website"><meta property="og:site_name" content="OmniStaq POS"><meta property="og:title" content="Track your OmniStaq order 📦"><meta property="og:description" content="Open your private link to see your order status, payment details and next steps."><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta property="og:image" content="https://omnistaq.github.io/omnistaq/og-omnistaq.png"><link rel="icon" href="favicon.ico"><link rel="apple-touch-icon" href="icon-180.png"><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="upgrade.css"><link rel="stylesheet" href="site-v3.css"><link rel="stylesheet" href="omni.css"></head>
+<body class="page-order">
+<header class="site-header"><a class="brand-v3" href="index.html" aria-label="OmniStaq home"><img src="icon-192.png" alt=""><strong>Omni<span>Staq</span></strong></a><a class="button button-outline" href="index.html">← Back to website</a></header>
+<main class="order-wrap"><div class="shell"><div class="order-card">
+  <div class="eyebrow">OMNISTAQ POS · ORDER TRACKING</div><h1>Your order, at a glance.</h1><p class="lead">Your private order link shows the latest status. Keep it somewhere safe.</p>
+  <div id="orderView" hidden>
+    <span class="status-badge" id="orderStatus"></span>
+    <div class="tracker" id="orderTracker"></div>
+    <div class="order-details" id="orderDetails"></div>
+    <div id="orderItems"></div>
+    <div id="bankDetails" class="bank-box" hidden></div>
+    <form id="proofForm" class="proof-form" hidden><label>Upload your bank transfer slip (PNG, JPG or WebP, max 3 MB)</label><input type="file" name="proof" accept="image/png,image/jpeg,image/webp" required><button class="button button-green" type="submit">Submit payment proof ↗</button></form>
+    <div id="orderMessage" role="status"></div>
+    <button id="orderWa" class="button button-green" type="button" hidden>💬 Chat with us on WhatsApp ↗</button>
+    <button id="copyLink" class="button button-dark" type="button">Copy private tracking link ↗</button>
+    <div id="cardRetry" hidden><p>Payment is still pending. You can continue to the secure card checkout.</p><button id="payNow" class="button button-green">Pay securely with card ↗</button></div>
+  </div>
+  <form id="lookupForm" class="lookup-form" hidden><p>Enter your order number and private token to check the status.</p><label>Order number<input name="ref" required placeholder="OS-..."></label><label>Private access token<input name="token" required placeholder="Token from your order link"></label><button class="button button-green">Track order ↗</button></form>
+  <p id="orderError" class="order-error" role="alert"></p>
+</div></div></main>
+<footer class="footer"><div class="shell footer-bottom"><span>© OmniStaq POS</span><a href="index.html#contact">Contact support ↗</a></div></footer>
+<script src="wa.js?v=4.0.0"></script><script src="order.js?v=4.0.0"></script></body></html>

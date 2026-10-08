@@ -1,0 +1,143 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><script src="config.js?v=4.0.0"></script><script src="loader.js?v=4.0.0"></script>
+<meta name="theme-color" content="#061a30"><meta name="robots" content="noindex"><meta name="apple-mobile-web-app-capable" content="yes"><link rel="manifest" href="manifest.webmanifest">
+<title>OmniStaq Admin</title><link rel="icon" href="favicon.ico"><link rel="apple-touch-icon" href="icon-180.png"><link rel="stylesheet" href="admin.css"></head><body>
+
+<!-- ============ LOGIN ============ -->
+<section id="loginView" class="login-screen">
+  <div class="login-card">
+    <div class="login-brand"><img src="icon-192.png" alt=""><strong>Omni<span>Staq</span></strong></div>
+    <h1>Admin sign in</h1><p>Manage offers, demo requests, orders and website campaigns.</p>
+    <form id="loginForm">
+      <label>Admin password<input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Enter your password"></label>
+      <label class="check"><input id="loginShow" type="checkbox"> Show password</label>
+      <button class="btn primary block" id="loginBtn">Sign in <span>→</span></button>
+    </form>
+    <div id="loginError" class="form-error" role="alert"></div>
+    <small class="login-note">Forgot the password? Run <code>create-admin.php</code> from the command line. First time? <a href="setup.html">Create the admin account</a>.</small>
+  </div>
+</section>
+
+<!-- ============ APP ============ -->
+<div id="dashboardView" class="app" hidden>
+  <aside class="side">
+    <a class="side-brand" href="index.html"><img src="icon-192.png" alt=""><span>Omni<b>Staq</b></span><em>ADMIN</em></a>
+    <nav class="side-nav" aria-label="Admin sections">
+      <button class="tab active" data-tab="overview"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.6"/><rect x="14" y="3" width="7" height="7" rx="1.6"/><rect x="3" y="14" width="7" height="7" rx="1.6"/><rect x="14" y="14" width="7" height="7" rx="1.6"/></svg><span>Dashboard</span></button>
+      <button class="tab" data-tab="products"><svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg><span>Offers</span></button>
+      <button class="tab" data-tab="campaign"><svg viewBox="0 0 24 24"><path d="M20.6 13.4l-7.2 7.2a2 2 0 01-2.8 0L3 13V3h10l7.6 7.6a2 2 0 010 2.8z"/><circle cx="7.5" cy="7.5" r="1.3"/></svg><span>Popup</span></button>
+      <button class="tab" data-tab="leads"><svg viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16" rx="2.6"/><path d="M8 2.5v4M16 2.5v4M3 10h18"/></svg><span>Demos</span><em class="badge" id="badgeDemos" hidden></em></button>
+      <button class="tab" data-tab="orders"><svg viewBox="0 0 24 24"><path d="M6 3h12l2 4v14l-3-2-3 2-3-2-3 2-3-2V7z"/><path d="M8 11h8M8 15h5"/></svg><span>Orders</span><em class="badge" id="badgeOrders" hidden></em></button>
+      <button class="tab" data-tab="settings"><svg viewBox="0 0 24 24"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></svg><span>Settings</span></button>
+    </nav>
+    <div class="side-foot"><a class="side-link" href="index.html" target="_blank" rel="noopener">View website ↗</a><button class="side-link" id="logout" type="button">Sign out</button></div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar"><div><small id="crumb">OVERVIEW</small><h1 id="pageTitle">Dashboard</h1></div><div class="top-actions"><button class="btn ghost" id="reload" type="button">↻ <span>Refresh</span></button></div></header>
+
+    <!-- Dashboard -->
+    <section class="panel active" id="tab-overview">
+      <div id="statGrid" class="stat-grid"></div>
+      <div class="grid-2">
+        <div class="card"><div class="card-head"><div><h2>Last 14 days</h2><p>Demo requests and orders received.</p></div><div class="legend"><i class="d1"></i>Demos <i class="d2"></i>Orders</div></div><div id="chart" class="chart"></div></div>
+        <div class="card"><div class="card-head"><div><h2>Quick actions</h2><p>Jump straight to common jobs.</p></div></div>
+          <div class="quick"><button class="qa" data-go="products" data-new="1" type="button"><b>＋</b>Add an offer</button><button class="qa" data-go="campaign" type="button"><b>%</b>Schedule popup</button><button class="qa" data-go="orders" type="button"><b>✓</b>Review orders</button><a class="qa" href="api.php?r=admin/export/orders"><b>⬇</b>Export orders</a></div></div>
+      </div>
+      <div class="card"><div class="card-head"><div><h2>Needs your attention</h2><p>Payments to verify, quotes to price and people to call back.</p></div></div><div id="attention" class="todo"></div></div>
+    </section>
+
+    <!-- Offers -->
+    <section class="panel" id="tab-products">
+      <div class="bar"><div class="chips" id="kindChips"></div><input id="productSearch" type="search" placeholder="Search offers…"><button id="addProduct" class="btn primary" type="button">＋ Add offer</button></div>
+      <p class="hint-line">POS systems, hardware and add-on modules customers can select and order. Price 0 = “Request a quote”.</p>
+      <div id="productAdminList" class="product-list"></div>
+    </section>
+
+    <!-- Popup -->
+    <section class="panel" id="tab-campaign">
+      <div class="grid-2 wide-left">
+        <div class="card">
+          <div class="card-head"><div><h2>Discount popup <span id="campStatus" class="pill"></span></h2><p>Shown once per visitor session. Schedule it with a start and end time.</p></div><label class="switch"><input id="campaignActive" type="checkbox"><span></span></label></div>
+          <form id="campaignForm" class="form-grid">
+            <label>Popup title<input name="title" maxlength="80" placeholder="A special offer for your business"></label>
+            <label>Discount headline<input name="discountText" maxlength="36" placeholder="10% OFF"></label>
+            <label>Starts <em>optional</em><input name="startAt" type="datetime-local"></label>
+            <label>Ends <em>optional</em><input name="endAt" type="datetime-local"></label>
+            <label>Button text<input name="ctaLabel" maxlength="40" placeholder="Claim this offer"></label>
+            <div class="span-2"><span class="lbl">Popup image</span>
+              <div class="imgfield" id="imgCampaign"><div class="imgfield-preview"></div><div class="imgfield-side"><div class="imgfield-actions"><label class="btn ghost file">Choose image<input type="file" accept="image/png,image/jpeg,image/webp"></label><button type="button" class="btn danger-ghost" data-remove>Remove image</button></div><small class="imgfield-status"></small><small class="hint">PNG, JPG or WebP · up to 2 MB</small></div></div></div>
+            <label class="span-2">Offer message<textarea name="message" rows="3" maxlength="240" placeholder="Tell visitors about this discount"></textarea></label>
+            <div class="span-2 actions"><button class="btn primary">Save popup</button></div>
+          </form>
+        </div>
+        <div class="card"><div class="card-head"><div><h2>Live preview</h2><p>Updates as you type.</p></div></div>
+          <div class="promo-preview"><div class="pp-img" id="ppImg"></div><div class="pp-body"><small>A LITTLE EXTRA FOR YOUR BUSINESS</small><b id="ppDisc">SPECIAL OFFER</b><h3 id="ppTitle">A special offer for your business</h3><p id="ppMsg"></p><span class="pp-btn" id="ppBtn">Claim this offer</span></div></div>
+          <p class="hint-line">Saving makes the popup appear again for visitors who closed the previous version.</p></div>
+      </div>
+    </section>
+
+    <!-- Demos -->
+    <section class="panel" id="tab-leads">
+      <div class="bar"><input id="demoSearch" type="search" placeholder="Search name, phone, business…"><select id="demoFilter"><option value="">All statuses</option><option>new</option><option>contacted</option><option>scheduled</option><option>closed</option></select><a class="btn ghost" href="api.php?r=admin/export/demos">⬇ Export CSV</a></div>
+      <div id="demoList" class="rows"></div>
+    </section>
+
+    <!-- Orders -->
+    <section class="panel" id="tab-orders">
+      <div class="bar"><input id="orderSearch" type="search" placeholder="Search reference, name, phone…"><select id="orderFilter"><option value="">All statuses</option><option>new</option><option>awaiting_payment</option><option>proof_submitted</option><option>needs_quote</option><option>payment_failed</option><option>paid</option><option>cancelled</option><option>chargeback</option></select><a class="btn ghost" href="api.php?r=admin/export/orders">⬇ Export CSV</a></div>
+      <div id="orderList" class="rows"></div>
+    </section>
+
+    <!-- Settings -->
+    <section class="panel" id="tab-settings">
+      <div class="card"><div class="card-head"><div><h2>Contact & payment details</h2><p>Power the WhatsApp button and the bank details customers see at checkout.</p></div></div>
+        <form id="settingsForm" class="form-grid">
+          <label class="span-2">WhatsApp number <em>country code, e.g. 94771234567 · 077… is converted automatically</em><input name="whatsapp" inputmode="tel" placeholder="94XXXXXXXXX"></label>
+          <label>Bank name<input name="bankName" placeholder="Commercial Bank"></label>
+          <label>Account name<input name="accountName" placeholder="Account holder name"></label>
+          <label>Account number<input name="accountNumber" inputmode="numeric" placeholder="Bank account number"></label>
+          <label>Branch<input name="bankBranch" placeholder="Branch name"></label>
+          <label>Support hours<input name="supportHours" placeholder="Monday – Saturday, 9 AM – 6 PM"></label>
+          <label>Demo video link<input name="demoVideo" type="url" placeholder="https://www.youtube.com/watch?v=..."></label>
+          <div class="span-2"><span class="lbl">Homepage POS screenshot</span>
+            <div class="imgfield" id="imgHero"><div class="imgfield-preview"></div><div class="imgfield-side"><div class="imgfield-actions"><label class="btn ghost file">Choose image<input type="file" accept="image/png,image/jpeg,image/webp"></label><button type="button" class="btn danger-ghost" data-remove>Remove image</button></div><small class="imgfield-status"></small><small class="hint">Shown in the hero section. Remove it to go back to the default illustration.</small></div></div></div>
+          <label class="span-2">Installation & training<textarea name="setupText" rows="2"></textarea></label>
+          <label class="span-2">Updates & support<textarea name="updateText" rows="2"></textarea></label>
+          <div class="span-2 note" id="cardTip"></div>
+          <div class="span-2 actions"><button class="btn primary">Save details</button></div>
+        </form></div>
+      <div class="card"><div class="card-head"><div><h2>Change admin password</h2><p>Minimum 10 characters. You will be signed out afterwards.</p></div></div>
+        <form id="passwordForm" class="form-grid"><label>Current password<input name="current" type="password" autocomplete="current-password" required></label><label>New password<input name="next" type="password" minlength="10" autocomplete="new-password" required></label><div class="span-2 actions"><button class="btn ghost">Update password</button></div></form>
+        <div class="note warn">Verify bank transfers yourself before setting an order to Paid.</div></div>
+    </section>
+  </div>
+</div>
+
+<!-- ============ PRODUCT EDITOR (drawer) ============ -->
+<div id="drawerBackdrop" class="backdrop" hidden></div>
+<aside id="productEditor" class="drawer" hidden aria-label="Offer editor">
+  <div class="drawer-head"><h2 id="productEditorTitle">Add offer</h2><button class="x" data-editor-close type="button" aria-label="Close">×</button></div>
+  <form id="productForm" class="drawer-body form-grid">
+    <input type="hidden" name="id">
+    <label class="span-2">Type<select name="kind"><option value="pos">POS system (software)</option><option value="hardware">Hardware</option><option value="addon">Add-on module</option><option value="service">Service (installation, training, support)</option></select></label>
+    <label>Name<input name="name" required maxlength="70" placeholder="Supermarket POS"></label>
+    <label>Category label<input name="category" maxlength="40" placeholder="SUPERMARKET & GROCERY"></label>
+    <label>Price (LKR) <em>0 = quote</em><input name="price" type="number" min="0" step="0.01" value="0"></label>
+    <label>Discount (%)<input name="discount" type="number" min="0" max="90" value="0"></label>
+    <label>Discount starts <em>optional</em><input name="discountStart" type="date"></label>
+    <label>Discount ends <em>optional</em><input name="discountEnd" type="date"></label>
+    <label>Icon / emoji<input name="icon" maxlength="8" value="🛒"></label>
+    <label>Display order <em>smaller = first</em><input name="sortOrder" type="number" value="0"></label>
+    <div class="span-2"><span class="lbl">Product image</span>
+      <div class="imgfield" id="imgProduct"><div class="imgfield-preview"></div><div class="imgfield-side"><div class="imgfield-actions"><label class="btn ghost file">Choose image<input type="file" accept="image/png,image/jpeg,image/webp"></label><button type="button" class="btn danger-ghost" data-remove>Remove image</button></div><small class="imgfield-status"></small><small class="hint">Without an image the site shows an illustration or the icon.</small></div></div></div>
+    <label class="check"><input name="featured" type="checkbox"> Highlight this offer</label>
+    <label class="check"><input name="active" type="checkbox" checked> Visible on website</label>
+    <label class="span-2">Short description<textarea name="description" rows="3" maxlength="240" required placeholder="What this offer helps the business do"></textarea></label>
+    <label class="span-2">Feature tags <em>comma separated, up to 6</em><input name="features" placeholder="Fast billing, Stock control, Sales reports"></label>
+    <div class="drawer-foot span-2"><button type="button" class="btn ghost" data-editor-close>Cancel</button><button class="btn primary">Save offer</button></div>
+  </form>
+</aside>
+
+<div id="lightbox" class="lightbox" hidden><button class="x" type="button" aria-label="Close">×</button><img alt="Payment slip"></div>
+<div id="adminToast" class="toast" role="status"></div>
+<script src="wa.js?v=4.0.0"></script><script src="admin.js?v=4.0.0"></script><p style="text-align:center;color:#6284a8;font:13px system-ui">OmniStaq v4.0.0 · <a href="connection.html">Connection check</a></p></body></html>

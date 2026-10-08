@@ -1,0 +1,10 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><script src="config.js?v=4.0.0"></script><script src="loader.js?v=4.0.0"></script>
+<meta name="robots" content="noindex"><meta name="theme-color" content="#061a30"><title>Set up OmniStaq Admin</title><link rel="icon" href="favicon.ico"><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="site-v3.css"><link rel="stylesheet" href="omni.css"></head>
+<body class="page-auth"><main class="auth"><div class="auth-card"><img class="auth-logo" src="omnistaq-logo-crop.png" alt="OmniStaq POS">
+<div class="eyebrow">FIRST-TIME SETUP</div><h1>Create your admin account.</h1><p>Choose a password to manage POS offers, demo requests and orders. On a live server you also need the setup key from config.local.php.</p>
+<form id="setupForm"><div id="keyWrap" hidden><label for="setupKey">Setup key (SETUP_KEY in config.local.php)</label><input id="setupKey" name="setupKey" type="password" autocomplete="off" placeholder="Your SETUP_KEY"></div>
+<label for="password">Admin password</label><input id="password" name="password" type="password" autocomplete="new-password" required minlength="10" placeholder="At least 10 characters"><div id="lengthHint" class="auth-hint">Use at least 10 characters.</div>
+<label for="confirm">Confirm password</label><input id="confirm" name="confirm" type="password" autocomplete="new-password" required placeholder="Type the same password again">
+<label class="auth-check"><input id="showPassword" type="checkbox"> Show passwords while typing</label><div id="setupError" class="auth-error" role="alert"></div>
+<button class="button button-cyan full" type="submit">Create admin account <span>→</span></button></form>
+<div class="auth-foot">Your password is stored as a secure hash in your MySQL database.</div></div></main><script src="setup.js?v=4.0.0"></script><p style="text-align:center;color:#6284a8;font:13px system-ui">OmniStaq v4.0.0 · <a href="connection.html">Connection check</a></p></body></html>

@@ -1,0 +1,14 @@
+# OmniStaq - Apache rules
+Options -Indexes
+DirectoryIndex index.html index.php
+
+# Internal files (everything is in one folder, so block the non-page files)
+<FilesMatch "^(config|config\.local|helpers|catalog|router|create-admin)\.php$">
+  Require all denied
+</FilesMatch>
+<FilesMatch "\.(sql|log|md|txt|bat|ps1|sh)$">
+  Require all denied
+</FilesMatch>
+<FilesMatch "^\.(git|env)">
+  Require all denied
+</FilesMatch>
